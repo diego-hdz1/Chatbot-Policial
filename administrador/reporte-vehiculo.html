@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <form class="form" id="consulta-form">
+            <div class="form-group">
+                <label for="referencia">No. Referencia:</label>
+                <input type="text" id="referencia" name="referencia" disabled>
+                
+                <label for="id-oficial">ID del Oficial:</label>
+                <input type="text" id="id-oficial"  name="id-oficial" disabled>
+            </div>
+
+            <div class="form-group">
+                <label for="motivo">Motivo de la consulta</label>
+                <input type="text" id="motivo" name="motivo" disabled>
+
+                <label for="nombre-sospechoso">Nombre del sospechoso</label>
+                <input type="text" id="nombre_sospechoso" name="nombre_sospechoso" disabled>
+            </div>
+
+            <div class="form-group">
+                <label for="nombre-sospechoso">No. de Serie</label>
+                <input type="text" id="no_serie" name="no_serie" disabled>
+                
+                <label for="placa">Placa del Vehículo</label>
+                <input type="text" id="placa" name="placa" disabled>
+            </div>
+
+            <div class="form-group">
+                <label for="respuesta">Respuesta al oficial</label>
+                <input type="text" id="respuesta" placeholder="Ingrese respuesta al oficial" required>
+            </div>
+
+            <div class="form-group">
+                <label for="respuesta">¿Se requiere seguimiento a la consulta?</label><br>
+                <input type="radio" id="si" name="seguimiento" value="si" required>
+                <label for="si">Sí</label><br>
+                <input type="radio" id="no" name="seguimiento" value="no" required>
+                <label for="no">No</label>
+            </div>
+
+            <!-- Contenedor para el mensaje de advertencia -->
+            <p id="warning-message" style="color: red; display: none;">Por favor, completa todos los campos antes de enviar.</p>
+
+            <div class="button-container">
+                <button type="button" class="button" id="regresar">Regresar</button>
+                <button type="submit" class="button" id="siguiente-consulta" disabled>Siguiente Consulta</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        $(document).ready(function() {
+            // Hacer la solicitud AJAX para obtener los datos
+            function obtenerDatos() {
+                $.ajax({
+                    url: 'obtener_datosV.php', // Archivo PHP que obtiene los datos
+                    type: 'GET',
+                    success: function (response) {
+                        const data = JSON.parse(response);
+
+                        // Rellenar los campos del formulario con los datos obtenidos
+                        $('#referencia').val(data.referencia);
+                        $('#id-oficial').val(data.id_oficial);
+                        $('#motivo').val(data.motivo);
+                        $('#nombre_sospechoso').val(data.nombre_sospechoso);
+                        $('#no_serie').val(data.no_serie);
+                        $('#placa').val(data.placa);
+
+                        // Validar si los campos tienen "En espera"
+                        validarBotonRegresar(data);
+
+                        // Verificar si se necesita recargar la página
+                        recargarPaginaSiEnEspera(data);
+                    },
+                    error: function () {
+                        alert("Error al obtener los datos.");
+                    }
+                });
+            }
+
+            // Validar si los campos contienen "En espera"
+            function validarBotonRegresar(data) {
+                const camposEnEspera = [
+                    data.referencia,
+                    data.id_oficial,
+                    data.motivo,
+                    data.nombre_sospechoso,
+                    data.no_serie,
+                    data.placa,
+                ];
+
+                const botonRegresar = $('#regresar');
+
+                // Si algún campo tiene "En espera", habilitar el botón "Regresar"
+                if (camposEnEspera.includes("En espera")) {
+                    botonRegresar.prop('disabled', false);
+                } else {
+                    botonRegresar.prop('disabled', true);
+                }
+            }
+
+            // Llamar a la función para obtener los datos al cargar la página
+            obtenerDatos();
+
+            // Evento para el botón "Regresar"
+            $('#regresar').click(function () {
+                // Redirigir solo si el botón está habilitado
+                if (!$(this).prop('disabled')) {
+                    window.location.href = 'seleccion_analista.html'; // Redirigir a otra página
+                }
+            });
+    
+            // Función para validar los campos
+            function validateForm() {
+                const respuesta = $('#respuesta').val().trim(); // Respuesta oficial
+                const seguimiento = $('input[name="seguimiento"]:checked').val(); // Seguimiento
+    
+                // Verificar que ambos campos estén llenos
+                if (respuesta !== "" && seguimiento){
+                    $('#siguiente-consulta').prop('disabled', false); // Habilitar el botón
+                    return true; // Los datos están completos
+                } else {
+                    $('#siguiente-consulta').prop('disabled', true); // Deshabilitar el botón
+                    return false; // Los datos no están completos
+                }
+            }
+    
+            // Validar los campos cuando el valor cambie
+            $('#respuesta, input[name="seguimiento"]').on('input change', function() {
+                validateForm(); // Llamar a la función de validación cada vez que un campo cambie
+            });
+    
+            // Función para enviar el SMS al oficial
+            function enviarSMS() {
+                const referencia = $('#referencia').val();
+                const id_oficial = $('#id-oficial').val();
+                const respuesta = $('#respuesta').val();
+                const seguimiento = $('input[name="seguimiento"]:checked').val();
+    
+                // Enviar los datos al servidor para que se envíe el mensaje SMS
+                $.ajax({
+                    url: 'enviar_msjV.php', // Archivo PHP que maneja el envío del SMS
+                    type: 'POST',
+                    data: {
+                        referencia: referencia,
+                        id_oficial: id_oficial,
+                        respuesta: respuesta,
+                        seguimiento: seguimiento
+                    },
+                    success: function(response) {
+                        alert(response); // Muestra la respuesta del servidor (ej. "Mensaje enviado exitosamente")
+                        // Si todo es exitoso, puedes hacer otras acciones como redirigir o limpiar el formulario
+                        location.reload(); // Recargar la página o lo que desees
+                    },
+                    error: function() {
+                        alert("Hubo un error al intentar enviar el mensaje.");
+                    }
+                });
+            }
+    
+            function recargarPaginaSiEnEspera(data) {
+                const camposEnEspera = [
+                    data.referencia,
+                    data.id_oficial,
+                    data.motivo,
+                    data.nombre_sospechoso,
+                    data.fecha
+                ];
+
+                // Si algún campo tiene "En espera", recargar la página cada 5 segundos
+                if (camposEnEspera.includes("En espera")) {
+                    setTimeout(function() {
+                        location.reload(); // Recargar la página
+                    }, 5000); // Recarga cada 5 segundos
+                }
+            }
+
+            // Evento para el botón "Siguiente Consulta"
+            $('#siguiente-consulta').click(function(e) {
+                e.preventDefault(); // Prevenir el comportamiento por defecto del botón (submit)
+    
+                // Validar antes de hacer la acción
+                if (validateForm()) {
+                    // Si la validación es correcta, enviar el mensaje al oficial
+                    enviarSMS(); // Llamar a la función para enviar el SMS
+                } else {
+                    alert("Por favor, completa todos los campos antes de continuar.");
+                }
+            });
+
+            // Evento para el botón "Regresar"
+            $('#regresar').click(function(e) {
+                e.preventDefault(); // Prevenir el comportamiento por defecto del botón (submit)
+    
+                // Validar antes de hacer la acción
+                if (validateForm()) {
+                    // Si la validación es correcta, enviar el mensaje al oficial
+                    window.location.href = 'seleccion_analista.html'; // Redirigir a otra página
+                } else {    
+                }
+            });
+        });
+    </script>
+    
+</body>
+</html>

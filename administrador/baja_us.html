@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baja Usuarios</title>
+    <link rel="stylesheet" href="estilos.css">
+    <link href="https://fonts.googleapis.com/css2?family=Krub:wght@400;700&family=Inria+Sans:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Encabezado blanco -->
+    <div class="header-container">
+        <div class="header">
+            <img src="baja.jpg" alt="Icono Baja" class="icono-alta">
+            <h1>Baja de Usuarios</h1>
+        </div>
+    </div>
+
+    <!-- Formulario para enviar el ID Usuario -->
+    <form action="baja.php" method="POST">
+        <!-- Contenedor del formulario gris -->
+        <div class="form-container">
+            <!-- Campos del lado izquierdo -->
+            <div class="left-container">
+                <div class="form-group">
+                    <label for="idus">ID Usuario:</label>
+                    <div class="input-group">
+                        <input type="text" id="idus" name="idus" placeholder="Ingresa el ID de usuario" required>
+                    </div>
+                </div>
+            </div>
+
+          
+            <div class="btn-agregar-container">
+                <button class="btn-agregar" type="submit">Eliminar</button>
+            </div>
+        </div>
+    </form>
+
+
+    <button type="button" class="btn-regresar" onclick="window.location.href='seleccion_admin.html'">Regresar</button>
+</body>
+</html>
+
+
+
