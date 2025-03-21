@@ -1,0 +1,112 @@
+/* General reset for margin and padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilos para el cuerpo */
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: gray;
+    background-size: cover; 
+    height: 100vh; 
+    background-color: rgba(164, 176, 231, 0.5); /* Fondo blanco semi-transparente */
+}
+
+/* Contenedor principal */
+.login-container {
+    display: flex;
+    justify-content: center; /* Alinea el contenido horizontalmente */
+    align-items: center;     /* Alinea el contenido verticalmente */
+    border: 2px solid #b5cde0;
+    background-image: url('polices.jpg');
+    opacity: .9;
+    background-size: cover; /* Ajusta la imagen para cubrir el área */
+    padding: 20px;
+    border-radius: 10px;
+    position: relative;
+    max-width: 500px;       /* Ancho máximo */
+    width: 100%;            /* Ancho flexible */
+    height: auto;           /* Alto automático */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Sombra alrededor del contenedor */
+}
+
+/* Estilo del formulario */
+.login-box {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 100%;
+}
+
+.login-box h2 {
+    color: #2d4b8b;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+/* Estilo de las etiquetas */
+label {
+    display: block;
+    font-size: 0.9rem;
+    color: #333;
+    margin-top: 10px;
+}
+
+/* Estilo de los campos de entrada */
+.input-group {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+.input-group .icon {
+    padding: 10px;
+    background-color: #f1f1f1;
+    border-right: 1px solid #ccc;
+}
+
+.input-group input {
+    border: none;
+    outline: none;
+    padding: 10px;
+    flex: 1;
+}
+
+/* Estilo del botón */
+button {
+    background-color: #3c72c9;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 0;
+    margin-top: 20px;
+    cursor: pointer;
+    font-size: 1rem;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #2d5ba7;
+}
+
+/* Estilo para el logo */
+.logo-container {
+    position: absolute;
+    top: 80px;
+    left: 120%;
+    transform: translateX(-50%); /* Centra el logo horizontalmente */
+}
+
+.logo-container img {
+    width: 170px;
+    height: auto;
+}

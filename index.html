@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio de Sesión</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <h2>Inicio Sesión</h2>
+            <form action="login.php" method="POST">
+                <label for="username">Nombre Usuario:</label>
+                <div class="input-group">
+                    <span class="icon">👤</span>
+                    <input type="text" id="username" name="username" placeholder="Rafael Llamas" required>
+                </div>
+                <label for="password">Contraseña:</label>
+                <div class="input-group">
+                    <span class="icon">🔒</span>
+                    <input type="password" id="password" name="password" placeholder="**********" required>
+                </div>
+                <button type="submit">LOGIN</button>
+            </form>
+        </div>
+        <div class="logo-container">
+            <img src="logo.jpg" alt="Policía Municipal Logo">
+        </div>
+    </div>
+</body>
+</html>
