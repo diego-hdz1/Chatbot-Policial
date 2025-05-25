@@ -22,29 +22,9 @@
         <div class="left-container">
             <div class="form-group">
                 <label for="idus">ID Usuario:</label>
-                <select id="idus" name="idus" required onchange="cargarDatos()">
+                <select id="idus" name="idus" required>
                 </select>
-                <script>
-                    // Cargar IDs al cargar la página
-                    document.addEventListener("DOMContentLoaded", function () {
-                            fetch("cargar_analistas.php")
-                                .then(response => {
-                                    if (!response.ok) {
-                                        throw new Error("Error al cargar datos de analistas");
-                                    }
-                                    return response.text();
-                                })
-                                .then(data => {
-                                    console.log(data); // Verifica qué datos se reciben
-                                    document.getElementById("idus").innerHTML = data;
-                                })
-                                .catch(error => {
-                                    console.error("Hubo un problema:", error);
-                                });
-                        });
-                
-                    
-                </script>
+
             </div>
             <div class="form-group">
                 <label for="apellido_paterno">Apellido Paterno:</label>
@@ -79,9 +59,53 @@
         </div>
         
     </div>
-
-  
     <button type="button" class="btn-regresar" onclick="window.location.href='seleccion_admin.html'">Regresar</button>
 
+    <script>
+        function cargarDatos(){
+            const idUsuario = document.getElementById("idus").value;
+
+            if(!idUsuario) return;
+
+            fetch(`obtener_datos.php?id=${idUsuario}`)
+            .then((response) => {
+                if(!response.ok){
+                    throw new Error("Error al obtener datos del usuario");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                document.getElementById("apellido_paterno").value = data.ap_paterno || "";
+                document.getElementById("apellido_materno").value = data.ap_materno || "";
+                document.getElementById("nombre").value = data.nombre || "";
+                document.getElementById("usuario").value = data.usuario || "";
+                document.getElementById("contrasena").value = data.contrasena || "";
+            }).catch((error)=>{
+                console.log(error);
+            })
+        }
+
+        // Cargar IDs al cargar la página
+        document.addEventListener("DOMContentLoaded", function () {
+            const select = document.getElementById("idus");
+
+            select.addEventListener("change", cargarDatos);
+
+                fetch("cargar_analistas.php")
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Error al cargar datos de analistas");
+                        }
+                        return response.text();
+                    })
+                    .then(data => {
+                        console.log(data); // Verifica qué datos se reciben
+                        document.getElementById("idus").innerHTML = data;
+                    })
+                    .catch(error => {
+                        console.error("Hubo un problema:", error);
+                    });
+            });
+    </script>
 </body>
 </html>
